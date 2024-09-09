@@ -34,16 +34,16 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_bucket"></a> [bucket](#input\_bucket) | n/a | `any` | n/a | yes |
-| <a name="input_create"></a> [create](#input\_create) | n/a | `bool` | `true` | no |
-| <a name="input_dynamodb-name"></a> [dynamodb-name](#input\_dynamodb-name) | n/a | `string` | `"terraform-lock"` | no |
-| <a name="input_provider_aws"></a> [provider\_aws](#input\_provider\_aws) | n/a | `any` | n/a | yes |
-| <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | n/a | `any` | n/a | yes |
+| <a name="input_bucket"></a> [bucket](#input\_bucket) | Configuration of the S3 bucket where we will store remote state. | <pre>object({<br>    name       = optional(string, "terraform-state")<br>    acl        = optional(string, "private")<br>    versioning = optional(string, "Enabled")<br>    lock       = optional(bool, true)<br>    key        = optional(string, "terraform/stacks/by-id/bucket/terraform.tfstate")<br>    table      = optional(string, "terraform-lock")<br>  })</pre> | n/a | yes |
+| <a name="input_create"></a> [create](#input\_create) | Dormant. Whether to create the S3 bucket | `bool` | `true` | no |
+| <a name="input_dynamodb-name"></a> [dynamodb-name](#input\_dynamodb-name) | Name of the DynamoDB table | `string` | `"terraform-lock"` | no |
+| <a name="input_provider_aws"></a> [provider\_aws](#input\_provider\_aws) | Configuration passed to the Hashicorp/aws provider | <pre>object({<br>    region = optional(string)<br>  })</pre> | n/a | yes |
+| <a name="input_resource_tags"></a> [resource\_tags](#input\_resource\_tags) | List of resource tags to be added to all created resources | `list(string)` | <pre>[<br>  "terraform",<br>  "infrastructure"<br>]</pre> | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_bucket"></a> [bucket](#output\_bucket) | n/a |
-| <a name="output_dynamodb"></a> [dynamodb](#output\_dynamodb) | n/a |
+| <a name="output_bucket"></a> [bucket](#output\_bucket) | Map with s3 bucket-specific information |
+| <a name="output_dynamodb"></a> [dynamodb](#output\_dynamodb) | Map with dynamodb table-specific information |
 <!-- END_TF_DOCS -->
