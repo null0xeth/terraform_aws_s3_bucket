@@ -1,0 +1,111 @@
+resource_tags = {
+  Managed_by = "terraform"
+  Name       = "Not-set-yet"
+}
+
+parent_bucket_id             = null
+parent_kms_key_id            = null
+parent_expected_bucket_owner = null
+
+provider_aws = {
+  region = "eu-west-1"
+}
+
+s3_global_resource_creation_config = {
+  append_random_id      = true
+  create_bucket         = true
+  create_bucket_policy  = false
+  create_kms_key        = true
+  create_kms_key_policy = false
+}
+
+s3_global_policy_config = {
+  enable_bucket_policy  = false
+  enable_kms_key_policy = false
+  bucket_policy         = null
+  kms_key_policy        = null
+}
+
+s3_acl_block = {
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# Use defaults and dynamically set others
+s3_acl_config = {}
+
+s3_bucket = {
+  acl_type                         = "acp"
+  bucket                           = "whichever-clucker"
+  enable_acl                       = true
+  enable_cors_configuration        = false
+  enable_lifecycle_configuration   = true
+  enable_logging                   = false
+  enable_object_lock_configuration = true
+  enable_server_side_encryption    = true
+  enable_versioning                = true
+  force_destroy                    = true
+  object_ownership                 = "BucketOwnerPreferred"
+  store_s3_object                  = false
+}
+
+# Dont use CORS
+s3_cors_rules = null
+# Dont use Logging
+s3_logging = null
+
+s3_lifecycle = {
+  rule = [{
+    id     = "default"
+    status = "Enabled"
+
+    expiration = {
+      days = 90
+    }
+
+    noncurrent_version_expiration = [{
+      noncurrent_days = 90
+    }]
+
+    noncurrent_version_transition = [{
+      noncurrent_days = 30
+      storage_class   = "STANDARD_IA"
+    }]
+
+    transition = [{
+      days          = 30
+      storage_class = "STANDARD_IA"
+      }, {
+      days          = 60
+      storage_class = "GLACIER"
+    }]
+  }]
+}
+
+s3_object_lock_configuration = {
+  object_lock_enabled = "Enabled"
+  rule = {
+    default_retention = {
+      days = 10
+      mode = "COMPLIANCE"
+    }
+  }
+}
+
+s3_server_side_encryption = {
+  rule = {
+    bucket_key_enabled = true
+    apply_server_side_encryption_by_default = {
+      sse_algorithm = "aws:kms"
+    }
+  }
+}
+
+s3_versioning = {
+  versioning_configuration = {
+    mfa_delete = "Disabled"
+    status     = "Enabled"
+  }
+}
