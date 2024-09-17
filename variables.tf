@@ -1,8 +1,7 @@
 ############# GLOBAL - MODULE SCOPED #####################################################################
-#### TO BE UPDATED
 variable "resource_tags" {
-  description = "List of tags to be added to created resources"
   type        = map(string)
+  description = "List of tags to be added to created resources"
   default = {
     Managed_by = "terraform"
     Name       = "Not-set-yet"
@@ -10,36 +9,34 @@ variable "resource_tags" {
 }
 
 variable "parent_bucket_id" {
-  description = "Use an existing bucket instead of creating a new one"
   type        = string
+  description = "Use an existing bucket instead of creating a new one"
   default     = null
 }
 
 variable "parent_kms_key_id" {
-  description = "Use an already existing KMS key instead of creating a new one"
   type        = string
+  description = "Use an already existing KMS key instead of creating a new one"
   default     = null
 }
 
 variable "parent_expected_bucket_owner" {
-  description = "The owner ID of the bucket passed to `parent_bucket_id`"
   type        = string
+  description = "The owner ID of the bucket passed to `parent_bucket_id`"
   default     = null
 }
 
 ########### GLOBAL - PROVIDER SCOPED #####################################################################
 variable "provider_aws" {
-  description = "Configuration passed to the Hashicorp/aws provider"
-  default     = {}
   type = object({
     region = optional(string, "eu-west-1")
   })
+  description = "Configuration passed to the Hashicorp/aws provider"
+  default     = {}
 }
 
 ########### GLOBAL - RESOURCE SCOPED #####################################################################
-#### TO BE UPDATED
 variable "s3_global_resource_creation_config" {
-  description = "Configure which resources will be created by this module"
   type = object({
     append_random_id      = optional(bool, true)
     create_bucket         = optional(bool, true)
@@ -47,32 +44,27 @@ variable "s3_global_resource_creation_config" {
     create_bucket_policy  = optional(bool, false)
     create_kms_key_policy = optional(bool, false)
   })
-  default = {}
+  description = "Configure which resources will be created by this module"
+  default     = {}
 }
 
 ########### GLOBAL - POLICY SCOPED #####################################################################
-#### TO BE UPDATED
 variable "s3_global_policy_config" {
-  description = "Configure which policies will be enabled for resources created by this module"
   type = object({
-    # Enable [x] policy
     enable_bucket_policy  = optional(bool, false)
     enable_kms_key_policy = optional(bool, false)
-    # Use existing resources when available
-    bucket_policy  = optional(any)
-    kms_key_policy = optional(any)
+    bucket_policy         = optional(any)
+    kms_key_policy        = optional(any)
 
   })
-  default = {}
+  description = "Configure which policies will be enabled for resources created by this module"
+  default     = {}
 }
 
 ########### S3 - BUCKET CREATION ########################################################################
 variable "s3_bucket" {
-  default     = {}
-  description = "Configure which child-resources will be created for the S3 bucket"
   type = object({
-    acl_type = optional(string, "acp")
-    #acl_canned_policy                = optional(string) # public-read|private
+    acl_type                         = optional(string, "acp")
     bucket                           = optional(string, "clucker-bucket")
     enable_acl                       = optional(bool, true)
     enable_cors_configuration        = optional(bool, false)
@@ -83,29 +75,28 @@ variable "s3_bucket" {
     enable_versioning                = optional(bool, true)
     store_s3_object                  = optional(bool, false)
     force_destroy                    = optional(bool, true)
-    object_ownership                 = optional(string, "BucketOwnerPreferred") # BucketOwnerPreferred|..
+    object_ownership                 = optional(string, "BucketOwnerPreferred")
   })
+  description = "Configure which child-resources will be created for the S3 bucket"
+  default     = {}
 }
 
 ########### S3 CONFIG - ACL - BLOCK ########################################################################
 variable "s3_acl_block" {
-  default     = {}
-  description = "General ACL configuration options"
   type = object({
-    #bucket                  = optional(string)
     block_public_acls       = optional(bool, true)
     block_public_policy     = optional(bool, true)
     ignore_public_acls      = optional(bool, true)
     restrict_public_buckets = optional(bool, true)
   })
+  description = "General ACL configuration options"
+  default     = {}
 }
 
 ########### S3 CONFIG - ACL - CONFIG ########################################################################
 variable "s3_acl_config" {
-  default     = {}
-  description = "Fine-grained ACL configuration options"
   type = object({
-    acl = optional(string) # READ|READ_ACP
+    acl = optional(string)
     access_control_policy = optional(list(object({
       owner = optional(object({
         id           = optional(string)
@@ -120,12 +111,12 @@ variable "s3_acl_config" {
       })), [{}])
     })), [{}])
   })
+  description = "Fine-grained ACL configuration options"
+  default     = {}
 }
 
 ########### S3 CONFIG - CORS - RULES ########################################################################
-#### TO BE UPDATED
 variable "s3_cors_rules" {
-  description = "Configure Cross-Origin Resource Sharing rules"
   type = list(object({
     allowed_headers = optional(list(string))
     allowed_methods = optional(list(string))
@@ -133,13 +124,12 @@ variable "s3_cors_rules" {
     expose_headers  = optional(list(string))
     max_age_seconds = optional(number)
   }))
-  default = null
+  description = "Configure Cross-Origin Resource Sharing rules"
+  default     = null
 }
 
 ########### S3 CONFIG - LOGGING ##############################################################################
 variable "s3_logging" {
-  default     = null
-  description = "Configure S3 Bucket logging"
   type = object({
     bucket        = optional(string)
     target_bucket = optional(string)
@@ -159,12 +149,12 @@ variable "s3_logging" {
       }))
     }), {})
   })
+  description = "Configure S3 Bucket logging"
+  default     = null
 }
 
 ########### S3 CONFIG - LIFECYCLE ##############################################################################
 variable "s3_lifecycle" {
-  default     = {}
-  description = "Configure S3 bucket lifecycle rules"
   type = object({
     rule = optional(list(object({
       id     = optional(string, "default")
@@ -216,11 +206,12 @@ variable "s3_lifecycle" {
       })), [{}])
     })), [{}])
   })
+  description = "Configure S3 bucket lifecycle rules"
+  default     = {}
 }
 
 ########### S3 CONFIG - OBJECT LOCK CONFIG ##############################################################
 variable "s3_object_lock_configuration" {
-  description = "Configure S3 bucket object locking"
   type = object({
     object_lock_enabled = optional(string, "Enabled")
     rule = optional(object({
@@ -231,28 +222,26 @@ variable "s3_object_lock_configuration" {
       }), {})
     }), {})
   })
-  default = {}
+  description = "Configure S3 bucket object locking"
+  default     = {}
 }
 
 ########### S3 CONFIG - SERVER SIDE ENCRYPTION ###########################################################
 variable "s3_server_side_encryption" {
-  default     = {}
-  description = "Configure S3 Bucket server-side encryption"
   type = object({
     rule = optional(object({
       apply_server_side_encryption_by_default = optional(object({
-        ######## PARAMS: ##########################################
         sse_algorithm = optional(string)
       }))
       bucket_key_enabled = optional(bool)
     }))
   })
+  description = "Configure S3 Bucket server-side encryption"
+  default     = {}
 }
 
 ########### S3 CONFIG - VERSIONING #####################################################################
 variable "s3_versioning" {
-  default     = {}
-  description = "Configure S3 Bucket versioning"
   type = object({
     mfa = optional(string)
     versioning_configuration = optional(object({
@@ -260,13 +249,12 @@ variable "s3_versioning" {
       mfa_delete = optional(string, "Disabled")
     }), {})
   })
+  description = "Configure S3 Bucket versioning"
+  default     = {}
 }
 
 ########### S3 - OBJECT IN BUCKET CREATION ##############################################################
-#### TO BE UPDATED
 variable "s3_object" {
-  default     = null
-  description = "Create a new object in an existing S3 bucket"
   type = object({
     bucket                        = optional(string)
     key                           = optional(string)
@@ -293,6 +281,8 @@ variable "s3_object" {
     storage_class                 = optional(string)
     tags                          = optional(map(any))
   })
+  description = "Create a new object in an existing S3 bucket"
+  default     = null
 }
 
 
