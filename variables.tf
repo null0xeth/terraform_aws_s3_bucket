@@ -51,8 +51,8 @@ variable "s3_global_resource_creation_config" {
 ########### GLOBAL - POLICY SCOPED #####################################################################
 variable "s3_global_policy_config" {
   type = object({
-    enable_bucket_policy  = optional(bool, false)
-    enable_kms_key_policy = optional(bool, false)
+    enable_bucket_policy  = optional(bool, true)
+    enable_kms_key_policy = optional(bool, true)
     bucket_policy         = optional(any)
     kms_key_policy        = optional(any)
 

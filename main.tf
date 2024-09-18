@@ -36,7 +36,7 @@ resource "aws_kms_key" "new" {
   description             = "Terraform generated- and managed KMS key"
   deletion_window_in_days = 7
   enable_key_rotation     = true
-  policy = (!local.create_kms_key_policy ? var.s3_global_policy_config.kms_key_policy : jsondecode({
+  policy = jsondecode({
     Version = "2012-10-17"
     Id      = "key-default-1"
     Statement = [
@@ -50,7 +50,7 @@ resource "aws_kms_key" "new" {
         Resource = "*"
       }
     ]
-  }))
+  })
 }
 
 ########### S3 - BUCKET CREATION ###########################################################################
@@ -89,7 +89,8 @@ resource "aws_s3_bucket_logging" "new" {
 resource "aws_s3_bucket_policy" "new" {
   count  = local.enable_bucket_policy ? 1 : 0
   bucket = aws_s3_bucket.new[0].id
-  policy = (!local.create_bucket_policy ? var.s3_global_policy_config.bucket_policy : jsondecode({
+  #policy = (!local.create_bucket_policy ? var.s3_global_policy_config.bucket_policy : jsondecode({
+  policy = jsondecode({
     Version = "2012-10-17"
     Id      = "s3-default-1"
     Statement = [
@@ -103,7 +104,7 @@ resource "aws_s3_bucket_policy" "new" {
         Resource = "*"
       }
     ]
-  }))
+  })
 }
 
 ########### S3 CONFIG - ACL - BLOCK ########################################################################
