@@ -109,7 +109,7 @@ data "aws_iam_policy_document" "s3" {
 resource "aws_s3_bucket_policy" "new" {
   count  = local.enable_bucket_policy ? 1 : 0
   bucket = aws_s3_bucket.new[0].id
-  policy = (!local.create_bucket_policy ? var.s3_global_policy_config.bucket_policy : aws_iam_policy_document.s3.json)
+  policy = (!local.create_bucket_policy ? var.s3_global_policy_config.bucket_policy : data.aws_iam_policy_document.s3.json)
   # jsonencode({
   #   Version = "2012-10-17"
   #   Id      = "s3-default-1"
