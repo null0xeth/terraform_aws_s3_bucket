@@ -232,9 +232,9 @@ variable "s3_server_side_encryption" {
     rule = optional(object({
       apply_server_side_encryption_by_default = optional(object({
         sse_algorithm = optional(string)
-      }))
+      }), {})
       bucket_key_enabled = optional(bool)
-    }))
+    }), {})
   })
   description = "Configure S3 Bucket server-side encryption"
   default     = {}
