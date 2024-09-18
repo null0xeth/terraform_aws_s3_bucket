@@ -231,9 +231,9 @@ variable "s3_server_side_encryption" {
   type = object({
     rule = optional(object({
       apply_server_side_encryption_by_default = optional(object({
-        sse_algorithm = optional(string)
+        sse_algorithm = optional(string, "aws:kms")
       }), {})
-      bucket_key_enabled = optional(bool)
+      bucket_key_enabled = optional(bool, true)
     }), {})
   })
   description = "Configure S3 Bucket server-side encryption"
